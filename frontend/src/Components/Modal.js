@@ -1,4 +1,12 @@
-const Modal = ({ children }) => {
+import { useEffect } from "react";
+
+const Modal = ({ children, success }) => {
+  useEffect(() => {
+    if (success) {
+      closeModal();
+    }
+  }, [success]);
+
   const closeModal = () => {
     const overlay = document.getElementById("overlay");
     const modal = document.getElementById("modal");
@@ -18,7 +26,7 @@ const Modal = ({ children }) => {
         onClick={closeModal}
       ></div>
       <div className="flex justify-center items-center h-full w-full">
-        <div className="modal-container w-96 h-64 absolute z-10 bg-white">
+        <div className="modal-container w-96 h-80 absolute z-10 bg-white">
           {children}
         </div>
       </div>

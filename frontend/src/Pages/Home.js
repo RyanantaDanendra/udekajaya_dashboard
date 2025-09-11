@@ -2,16 +2,24 @@ import { useState, useEffect } from "react";
 import "../App.css";
 import Layout from "../Components/Layout";
 import Modal from "../Components/Modal";
+import Swal from "sweetalert2";
 
 const Home = ({}) => {
   const [foods, setFoods] = useState([]);
   const [error, setError] = useState(null);
   const [isJumlah, setIsJumlah] = useState(false);
+  const [success, setSuccess] = useState(false);
+
+  const [foodId, setFoodId] = useState(null);
+
+  let timerInterval = 0;
+
+  const [jumlah, setJumlah] = useState("");
 
   useEffect(() => {
     const getFoods = async () => {
       try {
-        const response = await fetch("http://localhost:4000/foods", {
+        const response = await fetch("http://localhost:4000/foods/", {
           method: "GET",
         });
 
@@ -25,15 +33,18 @@ const Home = ({}) => {
           setFoods(json);
         }
       } catch (error) {
-        console.log(error);
+        console.log(error.message);
       }
     };
 
     getFoods();
-  }, []);
+  }, [success]);
 
-  const openModal = (isTrue) => {
+  const openModal = (isTrue, id) => {
     const modal = document.getElementById("modal");
+
+    setSuccess(false);
+    setFoodId(id);
 
     modal.classList.remove("opacity-0", "pointer-event-none");
     modal.classList.add("opacity-100", "pointer-events-auto");
@@ -46,10 +57,21 @@ const Home = ({}) => {
       className="card-container w-56 h-40 rounded-lg border-2 border-black pt-7 ps-4 pe-4"
       style={{ backgroundColor: "#E4EFE7" }}
     >
-      <h2 className="text-3xl">{food.nama}</h2>
+      <div className="flex justify-between">
+        <h2 className="text-3xl">{food.nama}</h2>
+        <button title="Hapus Data">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 640"
+            className="w-7"
+          >
+            <path d="M232.7 69.9C237.1 56.8 249.3 48 263.1 48L377 48C390.8 48 403 56.8 407.4 69.9L416 96L512 96C529.7 96 544 110.3 544 128C544 145.7 529.7 160 512 160L128 160C110.3 160 96 145.7 96 128C96 110.3 110.3 96 128 96L224 96L232.7 69.9zM128 208L512 208L512 512C512 547.3 483.3 576 448 576L192 576C156.7 576 128 547.3 128 512L128 208zM216 272C202.7 272 192 282.7 192 296L192 488C192 501.3 202.7 512 216 512C229.3 512 240 501.3 240 488L240 296C240 282.7 229.3 272 216 272zM320 272C306.7 272 296 282.7 296 296L296 488C296 501.3 306.7 512 320 512C333.3 512 344 501.3 344 488L344 296C344 282.7 333.3 272 320 272zM424 272C410.7 272 400 282.7 400 296L400 488C400 501.3 410.7 512 424 512C437.3 512 448 501.3 448 488L448 296C448 282.7 437.3 272 424 272z" />
+          </svg>
+        </button>
+      </div>
       <div className="flex justify-between items-center">
         <h5 className="text-md mt-3">Jumlah: {food.jumlah}</h5>
-        <button onClick={() => openModal(true)}>
+        <button onClick={() => openModal(true, food._id)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 640 640"
@@ -74,6 +96,58 @@ const Home = ({}) => {
     </div>
   ));
 
+  const editJumlah = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch(
+        `http://localhost:4000/foods/editJumlah/${foodId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ jumlah }),
+        }
+      );
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setError(json.error.message);
+      }
+
+      if (response.ok) {
+        Swal.fire({
+          title: "Data Berhasil Di Edit!",
+          icon: "success",
+          // html: "I will close in <b></b> milliseconds.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            console.log("I was closed by the timer");
+          }
+        });
+        setSuccess(true);
+        setJumlah("");
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
   return (
     <Layout>
       <div className="ps-10">
@@ -81,17 +155,64 @@ const Home = ({}) => {
         <button onClick={openModal}>Test</button>
         <div className="cards-wrapper flex flex-wrap gap-4 mt-8">
           {displayData}
+          <div className="card-container w-56 h-40 rounded-lg border-2 border-black flex justify-center opacity-75">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 640 640"
+              className="w-16"
+            >
+              <path d="M352 128C352 110.3 337.7 96 320 96C302.3 96 288 110.3 288 128L288 288L128 288C110.3 288 96 302.3 96 320C96 337.7 110.3 352 128 352L288 352L288 512C288 529.7 302.3 544 320 544C337.7 544 352 529.7 352 512L352 352L512 352C529.7 352 544 337.7 544 320C544 302.3 529.7 288 512 288L352 288L352 128z" />
+            </svg>
+          </div>
         </div>
       </div>
-      <Modal>
+      <Modal success={success}>
         {isJumlah ? (
-          <>
-            <h1>Edit Jumlah</h1>
-          </>
+          <div className="flex flex-col items-center">
+            <h1 className="text-center mt-7 text-2xl font-bold">Edit Jumlah</h1>
+            <form className="mt-20" onSubmit={editJumlah}>
+              <input
+                name="jumlah"
+                id="jumlah"
+                value={jumlah}
+                onChange={(e) => setJumlah(e.target.value)}
+                placeholder="Jumlah Baru. . ."
+                className="block border-b-2 border-b-black"
+              />
+              <div className="button-wrapper flex justify-center">
+                <button
+                  type="submit"
+                  className="mt-8 w-28 h-16 rounded-full text-white"
+                  style={{ backgroundColor: "#99BC85" }}
+                >
+                  Edit
+                </button>
+              </div>
+            </form>
+          </div>
         ) : (
-          <>
-            <h1>Edit Harga</h1>
-          </>
+          <div className="flex flex-col items-center">
+            <h1 className="text-center mt-7 text-2xl font-bold">Edit Harga</h1>
+            <form className="mt-20">
+              <input
+                name="harga"
+                id="harga"
+                value={jumlah}
+                onChange={(e) => setJumlah(e.target.value)}
+                placeholder="Harga Baru. . ."
+                className="block border-b-2 border-b-black"
+              />
+              <div className="button-wrapper flex justify-center">
+                <button
+                  type="submit"
+                  className="mt-8 w-28 h-16 rounded-full text-white"
+                  style={{ backgroundColor: "#99BC85" }}
+                >
+                  Edit
+                </button>
+              </div>
+            </form>
+          </div>
         )}
       </Modal>
     </Layout>
