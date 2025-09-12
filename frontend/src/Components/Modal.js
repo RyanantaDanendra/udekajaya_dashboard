@@ -26,7 +26,7 @@ const Modal = ({ children, success }) => {
         onClick={closeModal}
       ></div>
       <div className="flex justify-center items-center h-full w-full">
-        <div className="modal-container w-96 h-80 absolute z-10 bg-white">
+        <div className="modal-container w-96 min-h-80 absolute z-10 bg-white">
           {children}
         </div>
       </div>
