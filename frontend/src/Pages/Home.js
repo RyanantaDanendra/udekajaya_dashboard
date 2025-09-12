@@ -13,13 +13,11 @@ const Home = ({}) => {
 
   const [foodId, setFoodId] = useState(null);
 
-  console.log("isclicked", isClicked);
-  console.log("isjumlah", isJumlah);
-
   let timerInterval = 0;
 
   const [jumlah, setJumlah] = useState("");
   const [harga, setHarga] = useState("");
+  const [nama, setNama] = useState("");
 
   useEffect(() => {
     const getFoods = async () => {
@@ -173,8 +171,6 @@ const Home = ({}) => {
   };
 
   const deleteData = (e, id) => {
-    e.preventDefault();
-
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -263,7 +259,7 @@ const Home = ({}) => {
         </button>
       </div>
       <div className="flex justify-between items-center">
-        <h5 className="text-md">Harga: {food.harga}</h5>
+        <h5 className="text-md">Harga: {food.harga}/g</h5>
         <button onClick={() => openModal(false, food._id)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -276,6 +272,58 @@ const Home = ({}) => {
       </div>
     </div>
   ));
+
+  const addData = async (e) => {
+    e.preventDefault();
+
+    try {
+      const response = await fetch("http://localhost:4000/foods/addFood", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nama, jumlah, harga }),
+      });
+
+      const json = await response.json();
+
+      if (!response.ok) {
+        setError(json.error.message);
+      }
+
+      if (response.ok) {
+        Swal.fire({
+          title: "Data Berhasil Di Tambah!",
+          icon: "success",
+          html: "I will close in <b></b> milliseconds.",
+          timer: 2000,
+          timerProgressBar: true,
+          didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+            timerInterval = setInterval(() => {
+              timer.textContent = `${Swal.getTimerLeft()}`;
+            }, 100);
+          },
+          willClose: () => {
+            clearInterval(timerInterval);
+          },
+        }).then((result) => {
+          /* Read more about handling dismissals below */
+          if (result.dismiss === Swal.DismissReason.timer) {
+            setError("I was closed by the timer");
+          }
+        });
+
+        setNama("");
+        setJumlah("");
+        setHarga("");
+        setSuccess(true);
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   return (
     <Layout>
@@ -325,27 +373,27 @@ const Home = ({}) => {
         ) : isClicked && !isJumlah ? (
           <div className="flex flex-col pb-8">
             <h1 className="text-center mt-7 text-2xl font-bold">Tambah Data</h1>
-            <form className="mt-10 ps-7" onSubmit={editHarga}>
+            <form className="mt-10 ps-7" onSubmit={addData}>
               <label htmlFor="nama">Nama</label>
               <input
                 name="nama"
                 id="nama"
-                value={harga}
-                onChange={(e) => setHarga(e.target.value)}
+                value={nama}
+                onChange={(e) => setNama(e.target.value)}
                 className="block border-b-2 border-b-black bg-gray-100 w-56 mb-5"
               />
               <label htmlFor="jumlah">Jumlah</label>
               <input
-                name="nama"
-                id="nama"
-                value={harga}
-                onChange={(e) => setHarga(e.target.value)}
+                name="jumlah"
+                id="jumlah"
+                value={jumlah}
+                onChange={(e) => setJumlah(e.target.value)}
                 className="block border-b-2 border-b-black bg-gray-100 w-56 mb-5"
               />
               <label htmlFor="harga">Harga</label>
               <input
-                name="nama"
-                id="nama"
+                name="harga"
+                id="harga"
                 value={harga}
                 onChange={(e) => setHarga(e.target.value)}
                 className="block border-b-2 border-b-black bg-gray-100 w-56"
