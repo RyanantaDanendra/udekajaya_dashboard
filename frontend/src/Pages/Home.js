@@ -171,6 +171,8 @@ const Home = ({}) => {
   };
 
   const deleteData = (e, id) => {
+    e.preventDefault();
+
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -197,7 +199,7 @@ const Home = ({}) => {
 
           if (response.ok) {
             Swal.fire({
-              title: "Data Berhasil Di Haous!",
+              title: "Data Berhasil Di Hapus!",
               icon: "success",
               html: "<b></b> milliseconds.",
               timer: 2000,
@@ -329,7 +331,6 @@ const Home = ({}) => {
     <Layout>
       <div className="ps-10">
         <h1 className="text-3xl mt-12">Produk</h1>
-        <button onClick={openModal}>Test</button>
         <div className="cards-wrapper flex flex-wrap gap-4 mt-8">
           {displayData}
           <div
