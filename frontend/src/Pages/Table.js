@@ -1,10 +1,40 @@
 import { useState, useEffect } from "react";
-import Layout from "../Components/Layout";
 import "../App.css";
+import Layout from "../Components/Layout";
+import * as XLSX from "xlsx";
+import { saveAs } from "file-saver";
+import Swal from "sweetalert2";
 
 const Table = () => {
   const [foods, setFoods] = useState([]);
-  console.log(foods);
+
+  const exportExcel = () => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "Apakah anda yakin untuk menyimpan data?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const table = document.getElementById("table");
+
+        const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+
+        const excelBuffer = XLSX.write(workbook, {
+          bookType: "xlsx",
+          type: "array",
+        });
+
+        const data = new Blob([excelBuffer], {
+          type: "application/octet-stream",
+        });
+        saveAs(data, "data_pakan_hewan.xlsx");
+      }
+    });
+  };
 
   useEffect(() => {
     const getFoods = async () => {
@@ -45,7 +75,7 @@ const Table = () => {
       <div className="w-full ps-10 pe-12">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl mt-12">Table</h1>
-          <button className="p-0 mt-7" title="Simpan">
+          <button className="p-0 mt-7" title="Simpan" onClick={exportExcel}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 640 640"
@@ -60,13 +90,13 @@ const Table = () => {
         </div>
 
         <div className="form-wrapper flex justify-center mt-8">
-          <table>
+          <table id="table">
             <tr>
               <th className="w-12">No.</th>
               <th className="w-32">Nama</th>
               <th className="w-32">Jumlah</th>
               <th className="w-32">Harga/g</th>
-              <th className="w-32">Total Harga</th>
+              <th className="w-32">Total Harga(Rp)</th>
             </tr>
             {displayData}
           </table>

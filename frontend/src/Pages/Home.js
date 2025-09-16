@@ -10,6 +10,7 @@ const Home = ({}) => {
   const [isJumlah, setIsJumlah] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [search, setSearch] = useState("");
 
   const [foodId, setFoodId] = useState(null);
 
@@ -19,29 +20,37 @@ const Home = ({}) => {
   const [harga, setHarga] = useState("");
   const [nama, setNama] = useState("");
 
-  useEffect(() => {
-    const getFoods = async () => {
-      try {
-        const response = await fetch("http://localhost:4000/foods/", {
+  const getFoods = async (searchTerm = "") => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/foods?search=${searchTerm}`,
+        {
           method: "GET",
-        });
-
-        const json = await response.json();
-
-        if (!response.ok) {
-          console.log(json.error.message);
         }
+      );
 
-        if (response.ok) {
-          setFoods(json);
-        }
-      } catch (error) {
-        console.log(error.message);
+      const json = await response.json();
+
+      if (!response.ok) {
+        console.log(json.error.message);
       }
-    };
 
+      if (response.ok) {
+        setFoods(json);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+
+  useEffect(() => {
     getFoods();
   }, [success]);
+
+  const handleSearch = (e) => {
+    setSearch(e.target.value);
+    getFoods(e.target.value);
+  };
 
   const openModal = (isTrue, id) => {
     const modal = document.getElementById("modal");
@@ -329,8 +338,27 @@ const Home = ({}) => {
 
   return (
     <Layout>
-      <div className="ps-10">
-        <h1 className="text-3xl mt-12">Produk</h1>
+      <div className="ps-10 w-full">
+        <div className="flex justify-between items-center pe-9 w-full">
+          <h1 className="text-3xl mt-12">Produk</h1>
+          <div className="mt-10 flex">
+            <input
+              placeholder="Search . . ."
+              className="border-2 border-black w-56 border-r-0 rounded-l focus:outline-none"
+              value={search}
+              onChange={handleSearch}
+            />
+            <button className="border-2 border-black border-l-0">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 640 640"
+                className="w-5"
+              >
+                <path d="M480 272C480 317.9 465.1 360.3 440 394.7L566.6 521.4C579.1 533.9 579.1 554.2 566.6 566.7C554.1 579.2 533.8 579.2 521.3 566.7L394.7 440C360.3 465.1 317.9 480 272 480C157.1 480 64 386.9 64 272C64 157.1 157.1 64 272 64C386.9 64 480 157.1 480 272zM272 416C351.5 416 416 351.5 416 272C416 192.5 351.5 128 272 128C192.5 128 128 192.5 128 272C128 351.5 192.5 416 272 416z" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <div className="cards-wrapper flex flex-wrap gap-4 mt-8">
           {displayData}
           <div

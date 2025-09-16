@@ -1,8 +1,17 @@
 const Food = require("../models/foodModel");
 
 const index = async (req, res) => {
+  const { search } = req.query;
   try {
-    const foods = await Food.find({});
+    let query = {};
+
+    if (search) {
+      query = {
+        nama: { $regex: search, $options: "i" },
+      };
+    }
+
+    const foods = await Food.find(query);
     res.status(200).json(foods);
   } catch (error) {
     res.status(400).json({ error: error.message });
