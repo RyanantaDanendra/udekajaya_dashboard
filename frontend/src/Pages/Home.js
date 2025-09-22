@@ -3,8 +3,9 @@ import "../App.css";
 import Layout from "../Components/Layout";
 import Modal from "../Components/Modal";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
-const Home = ({}) => {
+const Home = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
   const [error, setError] = useState(null);
   const [isJumlah, setIsJumlah] = useState(false);
@@ -19,6 +20,7 @@ const Home = ({}) => {
   const [jumlah, setJumlah] = useState("");
   const [harga, setHarga] = useState("");
   const [nama, setNama] = useState("");
+  const navigate = useNavigate();
 
   const getFoods = async (searchTerm = "") => {
     try {
@@ -337,9 +339,9 @@ const Home = ({}) => {
   };
 
   return (
-    <Layout>
-      <div className="ps-10 w-full">
-        <div className="flex justify-between items-center pe-9 w-full">
+    <Layout setUser={setUser}>
+      <div className="lg:ps-10 w-full">
+        <div className="flex lg:justify-between lg:items-center pe-9 w-full flex-col items-center">
           <h1 className="text-3xl mt-12">Produk</h1>
           <div className="mt-10 flex">
             <input
@@ -359,7 +361,7 @@ const Home = ({}) => {
             </button>
           </div>
         </div>
-        <div className="cards-wrapper flex flex-wrap gap-4 mt-8">
+        <div className="cards-wrapper flex flex-wrap gap-4 mt-8 justify-center lg:justify-start">
           {displayData}
           <div
             onClick={openAddModal}

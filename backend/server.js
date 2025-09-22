@@ -5,16 +5,12 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 
 const foodRoutes = require("./routes/food");
+const userRoutes = require("./routes/user");
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
-
-// routes
-app.get("/", (req, res) => {
-  res.json({ mssg: "Hello World" });
-});
 
 mongoose
   .connect(process.env.MONGO_URI)
@@ -29,3 +25,4 @@ mongoose
   });
 
 app.use("/foods", foodRoutes);
+app.use("/", userRoutes);

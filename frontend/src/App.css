@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: open-sans;
+  src: url(./Fonts/Open_Sans/static/OpenSans-Regular.ttf);
+}
+@font-face {
+  font-family: open-sans-bold;
+  src: url(./Fonts/Open_Sans/static/OpenSans-Bold.ttf);
+}
+
+* {
+  font-family: open-sans;
+}
+
 #root {
   overflow-x: hidden;
 }

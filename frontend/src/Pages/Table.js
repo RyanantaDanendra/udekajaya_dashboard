@@ -5,7 +5,7 @@ import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
 
-const Table = () => {
+const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
 
   const exportExcel = () => {
@@ -65,14 +65,14 @@ const Table = () => {
       <td className="text-center">{index + 1}</td>
       <td className="text-center">{food.nama}</td>
       <td className="text-center">{food.jumlah}</td>
-      <td>{food.harga}</td>
-      <td>{food.totalHarga}</td>
+      <td>Rp. {food.harga}</td>
+      <td>Rp. {food.totalHarga}</td>
     </tr>
   ));
 
   return (
-    <Layout>
-      <div className="w-full ps-10 pe-12">
+    <Layout setUser={setUser}>
+      <div className="w-full lg:pt-0 pt-8 ps-10 pe-12">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl mt-12">Table</h1>
           <button className="p-0 mt-7" title="Simpan" onClick={exportExcel}>
@@ -91,14 +91,16 @@ const Table = () => {
 
         <div className="form-wrapper flex justify-center mt-8">
           <table id="table">
-            <tr>
-              <th className="w-12">No.</th>
-              <th className="w-32">Nama</th>
-              <th className="w-32">Jumlah</th>
-              <th className="w-32">Harga/g</th>
-              <th className="w-32">Total Harga(Rp)</th>
-            </tr>
-            {displayData}
+            <thead>
+              <tr>
+                <th className="w-12">No.</th>
+                <th className="w-32">Nama</th>
+                <th className="w-32">Jumlah</th>
+                <th className="w-32">Harga/sack</th>
+                <th className="w-32">Total Harga(Rp)</th>
+              </tr>
+            </thead>
+            <tbody>{displayData}</tbody>
           </table>
         </div>
       </div>
