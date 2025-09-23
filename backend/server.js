@@ -13,7 +13,7 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://udekajaya-dashboard.vercel.app/login",
+    origin: "https://udekajaya-dashboard.vercel.app/",
     methods: ["POST", "GET"],
     credentials: true,
   })
