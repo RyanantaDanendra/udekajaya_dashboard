@@ -26,3 +26,5 @@ mongoose
 
 app.use("/foods", foodRoutes);
 app.use("/", userRoutes);
+
+module.exports = app;
