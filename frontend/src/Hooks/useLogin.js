@@ -11,7 +11,7 @@ export const useLogin = (setUser) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch(`${appUrl}/login`, {
+    const response = await fetch("/api/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
