@@ -25,7 +25,7 @@ const Home = ({ setUser }) => {
 
   const getFoods = async (searchTerm = "") => {
     try {
-      const response = await fetch(`${url}/foods?search=${searchTerm}`, {
+      const response = await fetch(`${appUrl}/foods?search=${searchTerm}`, {
         method: "GET",
       });
 
