@@ -12,7 +12,7 @@ const Home = ({ setUser }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
-  const url = process.env.APP_URL;
+  const appUrl = process.env.APP_URL;
 
   const [foodId, setFoodId] = useState(null);
 
@@ -77,7 +77,7 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${url}/foods/editJumlah/${foodId}`, {
+      const response = await fetch(`${appUrl}/foods/editJumlah/${foodId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -127,7 +127,7 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${url}/foods/editHarga/${foodId}`, {
+      const response = await fetch(`${appUrl}/foods/editHarga/${foodId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
@@ -187,7 +187,7 @@ const Home = ({ setUser }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`${url}/foods/deleteFood/${id}`, {
+          const response = await fetch(`${appUrl}/foods/deleteFood/${id}`, {
             method: "DELETE",
           });
 
@@ -279,7 +279,7 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${url}/foods/addFood`, {
+      const response = await fetch(`${appUrl}/foods/addFood`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

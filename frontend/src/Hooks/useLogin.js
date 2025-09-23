@@ -5,13 +5,13 @@ export const useLogin = (setUser) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
-  const url = process.env.APP_URL;
+  const appUrl = process.env.APP_URL;
 
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch(`${url}/login`, {
+    const response = await fetch(`${appUrl}/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
