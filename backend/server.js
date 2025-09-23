@@ -11,7 +11,13 @@ const userRoutes = require("./routes/user");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://udekajaya-dashboard.vercel.app/login",
+    methods: ["POST", "GET"],
+    credentials: true,
+  })
+);
 
 connectToDatabase(process.env.MONGO_URI)
   // .then(() => {
