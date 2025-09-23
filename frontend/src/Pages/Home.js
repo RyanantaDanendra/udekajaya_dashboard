@@ -12,6 +12,7 @@ const Home = ({ setUser }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
+  const url = process.env.APP_URL;
 
   const [foodId, setFoodId] = useState(null);
 
@@ -24,12 +25,9 @@ const Home = ({ setUser }) => {
 
   const getFoods = async (searchTerm = "") => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/foods?search=${searchTerm}`,
-        {
-          method: "GET",
-        }
-      );
+      const response = await fetch(`${url}/foods?search=${searchTerm}`, {
+        method: "GET",
+      });
 
       const json = await response.json();
 
@@ -79,16 +77,13 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/foods/editJumlah/${foodId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ jumlah }),
-        }
-      );
+      const response = await fetch(`${url}/foods/editJumlah/${foodId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jumlah }),
+      });
 
       const json = await response.json();
 
@@ -132,16 +127,13 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/foods/editHarga/${foodId}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ harga }),
-        }
-      );
+      const response = await fetch(`${url}/foods/editHarga/${foodId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ harga }),
+      });
 
       const json = await response.json();
 
@@ -195,12 +187,9 @@ const Home = ({ setUser }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(
-            `http://localhost:4000/foods/deleteFood/${id}`,
-            {
-              method: "DELETE",
-            }
-          );
+          const response = await fetch(`${url}/foods/deleteFood/${id}`, {
+            method: "DELETE",
+          });
 
           const json = await response.json();
 
@@ -290,7 +279,7 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4000/foods/addFood", {
+      const response = await fetch(`${url}/foods/addFood`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

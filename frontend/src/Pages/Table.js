@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 
 const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
+  const url = process.env.APP_URL;
 
   const exportExcel = () => {
     Swal.fire({
@@ -39,7 +40,7 @@ const Table = ({ setUser }) => {
   useEffect(() => {
     const getFoods = async () => {
       try {
-        const response = await fetch("http://localhost:4000/foods", {
+        const response = await fetch(`${url}/foods`, {
           method: "GET",
         });
 
