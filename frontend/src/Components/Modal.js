@@ -8,7 +8,6 @@ const Modal = ({ children, success }) => {
   }, [success]);
 
   const closeModal = () => {
-    const overlay = document.getElementById("overlay");
     const modal = document.getElementById("modal");
 
     modal.classList.remove("opacity-100", "pointer-events-auto");

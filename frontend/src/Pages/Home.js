@@ -3,7 +3,6 @@ import "../App.css";
 import Layout from "../Components/Layout";
 import Modal from "../Components/Modal";
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
 
 const Home = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
@@ -21,7 +20,6 @@ const Home = ({ setUser }) => {
   const [jumlah, setJumlah] = useState("");
   const [harga, setHarga] = useState("");
   const [nama, setNama] = useState("");
-  const navigate = useNavigate();
 
   const getFoods = async (searchTerm = "") => {
     try {

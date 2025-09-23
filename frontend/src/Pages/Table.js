@@ -62,7 +62,7 @@ const Table = ({ setUser }) => {
   }, []);
 
   const displayData = foods.map((food, index) => (
-    <tr className={`${index % 2 == 0 ? "bg-gray-200" : "bg-white"}`}>
+    <tr className={`${index % 2 === 0 ? "bg-gray-200" : "bg-white"}`}>
       <td className="text-center">{index + 1}</td>
       <td className="text-center">{food.nama}</td>
       <td className="text-center">{food.jumlah}</td>

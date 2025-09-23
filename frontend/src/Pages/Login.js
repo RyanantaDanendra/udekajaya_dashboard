@@ -1,14 +1,11 @@
 import "../App.css";
 import { useState } from "react";
 import { useLogin } from "../Hooks/useLogin";
-import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
 
 const Login = ({ setUser }) => {
   const { error, isLoading, login } = useLogin(setUser);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
