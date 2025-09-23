@@ -5,7 +5,7 @@ export const useLogin = (setUser) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
-  const appUrl = process.env.APP_URL;
+  const appUrl = process.env.REACT_APP_APPURL;
 
   const login = async (email, password) => {
     setIsLoading(true);

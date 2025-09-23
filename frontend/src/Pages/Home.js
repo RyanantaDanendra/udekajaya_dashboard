@@ -12,7 +12,7 @@ const Home = ({ setUser }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
-  const appUrl = process.env.APP_URL;
+  const appUrl = process.env.REACT_APP_APPURL;
 
   const [foodId, setFoodId] = useState(null);
 

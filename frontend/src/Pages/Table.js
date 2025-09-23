@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 
 const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
-  const appUrl = process.env.APP_URL;
+  const appUrl = process.env.REACT_APP_APPURL;
 
   const exportExcel = () => {
     Swal.fire({
