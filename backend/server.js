@@ -24,7 +24,7 @@ mongoose
     console.log(error);
   });
 
-app.use("/foods", foodRoutes);
-app.use("/", userRoutes);
+app.use("/api/foods", foodRoutes);
+app.use("/api", userRoutes);
 
 module.exports = app;
