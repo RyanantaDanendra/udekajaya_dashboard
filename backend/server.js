@@ -34,7 +34,7 @@ app.use("/api/foods", foodRoutes);
 app.use("/api", userRoutes);
 
 // Add a catch-all for unsupported methods/routes
-app.all("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     error: `Route ${req.method} ${req.path} not found`,
   });
