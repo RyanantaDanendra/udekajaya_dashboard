@@ -14,9 +14,9 @@
   "routes": [
     {
       "src": "/favicon.ico",
-      "dest": "frontend/build/favicon.ico"
+      "dest": "build/favicon.ico"
     },
     { "src": "/api/(.*)", "dest": "api/index.js" },
-    { "src": "/(.*)", "dest": "frontend/build/index.html" }
+    { "src": "/(.*)", "dest": "build/index.html" }
   ]
 }
