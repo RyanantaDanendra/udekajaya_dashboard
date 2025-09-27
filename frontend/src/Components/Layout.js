@@ -1,7 +1,10 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "../App.css";
 import { Link } from "react-router-dom";
 
 const Layout = ({ children, setUser }) => {
+  const navigate = useNavigate();
   const windowSize = window.innerWidth;
 
   const logout = () => {

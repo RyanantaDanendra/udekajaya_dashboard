@@ -7,7 +7,6 @@ import Swal from "sweetalert2";
 
 const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
-  const appUrl = process.env.REACT_APP_APPURL;
 
   const exportExcel = () => {
     Swal.fire({
@@ -40,7 +39,7 @@ const Table = ({ setUser }) => {
   useEffect(() => {
     const getFoods = async () => {
       try {
-        const response = await fetch(`${appUrl}/foods`, {
+        const response = await fetch("http://localhost:4000/foods", {
           method: "GET",
         });
 
@@ -62,7 +61,7 @@ const Table = ({ setUser }) => {
   }, []);
 
   const displayData = foods.map((food, index) => (
-    <tr className={`${index % 2 === 0 ? "bg-gray-200" : "bg-white"}`}>
+    <tr className={`${index % 2 == 0 ? "bg-gray-200" : "bg-white"}`}>
       <td className="text-center">{index + 1}</td>
       <td className="text-center">{food.nama}</td>
       <td className="text-center">{food.jumlah}</td>

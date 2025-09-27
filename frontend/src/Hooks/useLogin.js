@@ -1,17 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const useLogin = (setUser) => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
-  const appUrl = process.env.REACT_APP_APPURL;
 
   const login = async (email, password) => {
     setIsLoading(true);
     setError(null);
 
-    const response = await fetch(`/api/login`, {
+    const response = await fetch("http://localhost:4000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

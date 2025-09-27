@@ -3,6 +3,7 @@ import "../App.css";
 import Layout from "../Components/Layout";
 import Modal from "../Components/Modal";
 import Swal from "sweetalert2";
+import { useNavigate } from "react-router-dom";
 
 const Home = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
@@ -11,7 +12,6 @@ const Home = ({ setUser }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
-  const appUrl = process.env.REACT_APP_APPURL;
 
   const [foodId, setFoodId] = useState(null);
 
@@ -20,12 +20,16 @@ const Home = ({ setUser }) => {
   const [jumlah, setJumlah] = useState("");
   const [harga, setHarga] = useState("");
   const [nama, setNama] = useState("");
+  const navigate = useNavigate();
 
   const getFoods = async (searchTerm = "") => {
     try {
-      const response = await fetch(`${appUrl}/foods?search=${searchTerm}`, {
-        method: "GET",
-      });
+      const response = await fetch(
+        `http://localhost:4000/foods?search=${searchTerm}`,
+        {
+          method: "GET",
+        }
+      );
 
       const json = await response.json();
 
@@ -75,13 +79,16 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${appUrl}/foods/editJumlah/${foodId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ jumlah }),
-      });
+      const response = await fetch(
+        `http://localhost:4000/foods/editJumlah/${foodId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ jumlah }),
+        }
+      );
 
       const json = await response.json();
 
@@ -125,13 +132,16 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${appUrl}/foods/editHarga/${foodId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ harga }),
-      });
+      const response = await fetch(
+        `http://localhost:4000/foods/editHarga/${foodId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ harga }),
+        }
+      );
 
       const json = await response.json();
 
@@ -185,9 +195,12 @@ const Home = ({ setUser }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const response = await fetch(`${appUrl}/foods/deleteFood/${id}`, {
-            method: "DELETE",
-          });
+          const response = await fetch(
+            `http://localhost:4000/foods/deleteFood/${id}`,
+            {
+              method: "DELETE",
+            }
+          );
 
           const json = await response.json();
 
@@ -277,7 +290,7 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`${appUrl}/foods/addFood`, {
+      const response = await fetch("http://localhost:4000/foods/addFood", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
