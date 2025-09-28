@@ -11,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 
+const allowedOrigin = process.env.FRONTEND_URL;
 const corsOptions = {
   // Only allow requests from your frontend domain
   origin: allowedOrigin,
