@@ -10,7 +10,15 @@ const userRoutes = require("./routes/user");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
+
+const corsOptions = {
+  // Only allow requests from your frontend domain
+  origin: allowedOrigin,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 
 mongoose
   .connect(process.env.MONGO_URI)
