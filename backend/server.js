@@ -24,6 +24,8 @@ const corsOptions = {
 // 1. CORS Configuration - Applied globally to handle OPTIONS requests first
 app.use(cors(corsOptions));
 
+app.options("*", cors(corsOptions));
+
 // 2. JSON Body Parser
 app.use(express.json());
 
