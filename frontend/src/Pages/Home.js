@@ -7,11 +7,15 @@ import { useNavigate } from "react-router-dom";
 
 const Home = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
-  const [error, setError] = useState(null);
+  const [queryError, setError] = useState(null);
   const [isJumlah, setIsJumlah] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
+
+  // ferch user authorization token
+  const userLocal = JSON.parse(localStorage.getItem("user"));
+  const token = userLocal.token;
 
   const [foodId, setFoodId] = useState(null);
 
@@ -25,9 +29,12 @@ const Home = ({ setUser }) => {
   const getFoods = async (searchTerm = "") => {
     try {
       const response = await fetch(
-        `http://localhost:4000/foods?search=${searchTerm}`,
+        `${process.env.REACT_APP_BACKEND}foods?search=${searchTerm}`,
         {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
 
@@ -41,7 +48,7 @@ const Home = ({ setUser }) => {
         setFoods(json);
       }
     } catch (error) {
-      console.log(error.message);
+      setError(error.message);
     }
   };
 
@@ -54,11 +61,13 @@ const Home = ({ setUser }) => {
     getFoods(e.target.value);
   };
 
-  const openModal = (isTrue, id) => {
+  const openModal = (isTrue, id, harga, jumlah) => {
     const modal = document.getElementById("modal");
 
     setSuccess(false);
     setFoodId(id);
+    setHarga(harga);
+    setJumlah(jumlah);
 
     modal.classList.remove("opacity-0", "pointer-event-none");
     modal.classList.add("opacity-100", "pointer-events-auto");
@@ -80,11 +89,12 @@ const Home = ({ setUser }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/foods/editJumlah/${foodId}`,
+        `${process.env.REACT_APP_BACKEND}/editJumlah/${foodId}`,
         {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ jumlah }),
         }
@@ -133,7 +143,7 @@ const Home = ({ setUser }) => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/foods/editHarga/${foodId}`,
+        `${process.env.REACT_APP_BACKEND}/foods/editHarga/${foodId}`,
         {
           method: "PATCH",
           headers: {
@@ -196,9 +206,10 @@ const Home = ({ setUser }) => {
       if (result.isConfirmed) {
         try {
           const response = await fetch(
-            `http://localhost:4000/foods/deleteFood/${id}`,
+            `${process.env.REACT_APP_BACKEND}/foods/deleteFood/${id}`,
             {
               method: "DELETE",
+              headers: { Authorization: `Bearer ${token}` },
             }
           );
 
@@ -261,7 +272,11 @@ const Home = ({ setUser }) => {
       </div>
       <div className="flex justify-between items-center">
         <h5 className="text-md mt-3">Jumlah: {food.jumlah}</h5>
-        <button onClick={() => openModal(true, food._id)}>
+        <button
+          onClick={() =>
+            openModal(true, food._id, food.harga, setJumlah(food.jumlah))
+          }
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 640 640"
@@ -272,8 +287,8 @@ const Home = ({ setUser }) => {
         </button>
       </div>
       <div className="flex justify-between items-center">
-        <h5 className="text-md">Harga: {food.harga}/g</h5>
-        <button onClick={() => openModal(false, food._id)}>
+        <h5 className="text-md">Harga: {food.harga}/sack</h5>
+        <button onClick={() => openModal(false, food._id, food.harga)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 640 640"
@@ -290,13 +305,17 @@ const Home = ({ setUser }) => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:4000/foods/addFood", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nama, jumlah, harga }),
-      });
+      const response = await fetch(
+        `${process.env.REACT_APP_BACKEND}/foods/addFood`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ nama, jumlah, harga }),
+        }
+      );
 
       const json = await response.json();
 
@@ -308,7 +327,7 @@ const Home = ({ setUser }) => {
         Swal.fire({
           title: "Data Berhasil Di Tambah!",
           icon: "success",
-          html: "I will close in <b></b> milliseconds.",
+          html: "Popup is closing in <b></b> milliseconds.",
           timer: 2000,
           timerProgressBar: true,
           didOpen: () => {
@@ -341,7 +360,7 @@ const Home = ({ setUser }) => {
   return (
     <Layout setUser={setUser}>
       <div className="lg:ps-10 w-full">
-        <div className="flex lg:justify-between lg:items-center pe-9 w-full flex-col items-center">
+        <div className="flex lg:flex-row lg:justify-between lg:items-center pe-9 w-full flex-col items-center">
           <h1 className="text-3xl mt-12">Produk</h1>
           <div className="mt-10 flex">
             <input
@@ -465,7 +484,6 @@ const Home = ({ setUser }) => {
           </div>
         ) : null}
       </Modal>
-      <h1>{error && `${error}`}</h1>
     </Layout>
   );
 };

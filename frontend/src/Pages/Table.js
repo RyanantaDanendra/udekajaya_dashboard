@@ -8,6 +8,9 @@ import Swal from "sweetalert2";
 const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
 
+  const userLocal = JSON.parse(localStorage.getItem("user"));
+  const token = userLocal.token;
+
   const exportExcel = () => {
     Swal.fire({
       title: "Are you sure?",
@@ -41,6 +44,9 @@ const Table = ({ setUser }) => {
       try {
         const response = await fetch("http://localhost:4000/foods", {
           method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         const json = await response.json();

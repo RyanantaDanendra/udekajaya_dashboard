@@ -1,4 +1,5 @@
 const express = require("express");
+const requireAuth = require("../middleware/requireAuth");
 
 const {
   index,
@@ -9,6 +10,7 @@ const {
 } = require("../controllers/foodController");
 
 const router = express.Router();
+router.use(requireAuth);
 
 router.get("/", index);
 
