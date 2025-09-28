@@ -9,7 +9,7 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-const allowedOrigin = process.env.FRONTEND_URL;
+const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:3000";
 const corsOptions = {
   // Only allow requests from your frontend domain
   origin: allowedOrigin,
