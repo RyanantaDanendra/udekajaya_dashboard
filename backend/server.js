@@ -9,21 +9,38 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-app.use(express.json());
-
 const allowedOrigin = process.env.FRONTEND_URL;
 const corsOptions = {
   // Only allow requests from your frontend domain
   origin: allowedOrigin,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
   credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
 app.use(cors(corsOptions));
 
+app.use(express.json());
+
+app.use("/foods", foodRoutes);
+app.use("/", userRoutes);
+
+app.get("/", (req, res) => {
+  res.status(200).json({ message: "Backend Serverless Function is running!" });
+});
+
+let isConnected = false;
+
 const connectDb = async () => {
+  if (isConnected) {
+    console.log("Using existing database connection.");
+    return;
+  }
+
   try {
-    mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI);
+    isConnected = true;
     console.log("Connected to db");
   } catch (error) {
     console.error("MongoDB connection error:", error);
@@ -42,13 +59,6 @@ const connectDb = async () => {
 //   .catch((error) => {
 //     console.log(error);
 //   });
-
-app.use("/foods", foodRoutes);
-app.use("/", userRoutes);
-
-app.get("/", (req, res) => {
-  res.status(200).json({ message: "Backend Serverless Function is running!" });
-});
 
 module.exports = async (req, res) => {
   await connectDb();
