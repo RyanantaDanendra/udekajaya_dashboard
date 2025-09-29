@@ -9,23 +9,14 @@ const userRoutes = require("./routes/user");
 
 const app = express();
 
-const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:3000";
+// Define allowed origins
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3000",
+  "http://localhost:5174",
+  "https://udekajaya-dashboard.vercel.app",
+];
 
 // --- Middleware Setup ---
-// const corsOptions = {
-//   // This value is read from the Vercel ENV variable.
-//   origin: allowedOrigin,
-//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-//   credentials: true,
-//   // Setting 200 is often more reliable than 204 in Vercel for preflight success.
-//   optionsSuccessStatus: 200,
-// };
-
-// // 1. CORS Configuration - Applied globally to handle OPTIONS requests first
-// app.use(cors(corsOptions));
-
-// app.options("*", cors(corsOptions));
-
 app.use((req, res, next) => {
   const origin = req.headers.origin;
 
@@ -34,7 +25,7 @@ app.use((req, res, next) => {
     res.setHeader("Access-Control-Allow-Origin", origin);
   } else if (!origin) {
     // For same-origin requests (no Origin header)
-    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5174");
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
   }
 
   res.setHeader(
@@ -64,12 +55,11 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "Backend Serverless Function is running!",
-    allowed_origin_set: allowedOrigin,
+    allowed_origins: allowedOrigins,
   });
 });
 
 // --- Route Handlers ---
-// These routes will only be processed after the global CORS check passes
 app.use("/foods", foodRoutes);
 app.use("/", userRoutes);
 
@@ -91,14 +81,8 @@ const connectDb = async () => {
   }
 };
 
-// --- Vercel Serverless Export (Structural Fix for Stability) ---
-const handler = (req, res) => {
-  // Explicitly pass the request to the Express app instance
-  app(req, res);
-};
-
+// --- Vercel Serverless Export ---
 module.exports = async (req, res) => {
   await connectDb();
-  // Use the explicit handler function
-  handler(req, res);
+  app(req, res);
 };
