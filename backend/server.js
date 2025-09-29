@@ -19,7 +19,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.status(200).json({
     message: "Backend Serverless Function is running!",
-    allowed_origins: allowedOrigins,
+    // allowed_origins: allowedOrigins,
   });
 });
 
