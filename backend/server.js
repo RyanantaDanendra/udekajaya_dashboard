@@ -12,19 +12,50 @@ const app = express();
 const allowedOrigin = process.env.FRONTEND_URL || "http://localhost:3000";
 
 // --- Middleware Setup ---
-const corsOptions = {
-  // This value is read from the Vercel ENV variable.
-  origin: allowedOrigin,
-  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-  credentials: true,
-  // Setting 200 is often more reliable than 204 in Vercel for preflight success.
-  optionsSuccessStatus: 200,
-};
+// const corsOptions = {
+//   // This value is read from the Vercel ENV variable.
+//   origin: allowedOrigin,
+//   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+//   credentials: true,
+//   // Setting 200 is often more reliable than 204 in Vercel for preflight success.
+//   optionsSuccessStatus: 200,
+// };
 
-// 1. CORS Configuration - Applied globally to handle OPTIONS requests first
-app.use(cors(corsOptions));
+// // 1. CORS Configuration - Applied globally to handle OPTIONS requests first
+// app.use(cors(corsOptions));
 
-app.options("*", cors(corsOptions));
+// app.options("*", cors(corsOptions));
+
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  // Set CORS headers for allowed origins
+  if (origin && allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  } else if (!origin) {
+    // For same-origin requests (no Origin header)
+    res.setHeader("Access-Control-Allow-Origin", "http://localhost:5174");
+  }
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Max-Age", "86400");
+
+  // Handle OPTIONS preflight
+  if (req.method === "OPTIONS") {
+    res.status(200).end();
+    return;
+  }
+
+  next();
+});
 
 // 2. JSON Body Parser
 app.use(express.json());
