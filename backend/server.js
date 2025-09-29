@@ -2,46 +2,15 @@ require("dotenv").config();
 
 const express = require("express");
 const mongoose = require("mongoose");
+const corsMiddleware = require("./middleware/cors");
 
 const foodRoutes = require("./routes/food");
 const userRoutes = require("./routes/user");
 
 const app = express();
 
-// Define allowed origins
-const allowedOrigins = [
-  process.env.FRONTEND_URL || "https://udekajaya-dashboard.vercel.app",
-  "http://localhost:3000",
-  "http://localhost:5174",
-];
-
-// --- CRITICAL: CORS MUST BE FIRST ---
-app.use((req, res, next) => {
-  const origin = req.headers.origin;
-
-  // Set CORS headers for allowed origins
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
-
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET, POST, PUT, DELETE, OPTIONS, PATCH"
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Requested-With, Accept, Origin"
-  );
-  res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Max-Age", "86400");
-
-  // Handle OPTIONS preflight
-  if (req.method === "OPTIONS") {
-    return res.status(200).end();
-  }
-
-  next();
-});
+// use cors middleware
+app.use(corsMiddleware);
 
 // JSON Body Parser (AFTER CORS, BEFORE ROUTES)
 app.use(express.json());
