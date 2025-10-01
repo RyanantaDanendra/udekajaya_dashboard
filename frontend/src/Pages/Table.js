@@ -42,7 +42,7 @@ const Table = ({ setUser }) => {
   useEffect(() => {
     const getFoods = async () => {
       try {
-        const response = await fetch("http://localhost:4000/foods", {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND}/foods`, {
           method: "GET",
           headers: {
             Authorization: `Bearer ${token}`,
@@ -67,12 +67,15 @@ const Table = ({ setUser }) => {
   }, []);
 
   const displayData = foods.map((food, index) => (
-    <tr className={`${index % 2 == 0 ? "bg-gray-200" : "bg-white"}`}>
-      <td className="text-center">{index + 1}</td>
-      <td className="text-center">{food.nama}</td>
-      <td className="text-center">{food.jumlah}</td>
-      <td>Rp. {food.harga}</td>
-      <td>Rp. {food.totalHarga}</td>
+    <tr
+      key={index}
+      className={`${index % 2 == 0 ? "bg-gray-200" : "bg-white"}`}
+    >
+      <td className="text-center lg:text-xl text-xs">{index + 1}</td>
+      <td className="text-center lg:text-xl text-xs">{food.nama}</td>
+      <td className="text-center lg:text-xl text-xs">{food.jumlah}</td>
+      <td className="lg:text-xl text-xs">Rp. {food.harga}</td>
+      <td className="lg:text-xl text-xs">Rp. {food.totalHarga}</td>
     </tr>
   ));
 
@@ -99,11 +102,11 @@ const Table = ({ setUser }) => {
           <table id="table">
             <thead>
               <tr>
-                <th className="w-12">No.</th>
-                <th className="w-32">Nama</th>
-                <th className="w-32">Jumlah</th>
-                <th className="w-32">Harga/sack</th>
-                <th className="w-32">Total Harga(Rp)</th>
+                <th className="w-12 text-sm lg:text-xl">No.</th>
+                <th className="w-32 text-xs lg:text-xl">Nama</th>
+                <th className="w-32 text-xs lg:text-xl">Jumlah</th>
+                <th className="w-32 text-xs lg:text-xl">Harga/sack</th>
+                <th className="w-40 text-xs lg:text-xl">Total Harga(Rp)</th>
               </tr>
             </thead>
             <tbody>{displayData}</tbody>

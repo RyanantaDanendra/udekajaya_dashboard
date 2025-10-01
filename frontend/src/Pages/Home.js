@@ -29,7 +29,7 @@ const Home = ({ setUser }) => {
   const getFoods = async (searchTerm = "") => {
     try {
       const response = await fetch(
-        `${process.env.REACT_APP_BACKEND}foods?search=${searchTerm}`,
+        `${process.env.REACT_APP_BACKEND}/foods?search=${searchTerm}`,
         {
           method: "GET",
           headers: {

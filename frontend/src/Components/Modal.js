@@ -18,7 +18,7 @@ const Modal = ({ children, success }) => {
   return (
     <div
       id="modal"
-      className="modal absolute overflow-x-hidden w-screen h-screen opacity-0 transition-all duration-500 ease-out pointer-events-none z-50"
+      className="modal absolute overflow-x-hidden w-screen h-screen opacity-0 transition-all duration-500 ease-out pointer-events-none z-50 top-0"
     >
       <div
         id="overlay"
