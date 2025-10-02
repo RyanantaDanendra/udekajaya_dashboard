@@ -1,5 +1,5 @@
 const allowedOrigins = [
-  "https://udekajaya-dashboard.vercel.app",
+  "https://udekayasa-dashboard.vercel.app",
   "http://localhost:3000",
   "http://localhost:5174",
 ];
