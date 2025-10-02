@@ -4,6 +4,7 @@ import Layout from "../Components/Layout";
 import Modal from "../Components/Modal";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { ThreeDot } from "react-loading-indicators";
 
 const Home = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
@@ -12,6 +13,7 @@ const Home = ({ setUser }) => {
   const [isClicked, setIsClicked] = useState(false);
   const [success, setSuccess] = useState(false);
   const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   // ferch user authorization token
   const userLocal = JSON.parse(localStorage.getItem("user"));
@@ -27,6 +29,8 @@ const Home = ({ setUser }) => {
   const navigate = useNavigate();
 
   const getFoods = async (searchTerm = "") => {
+    setIsLoading(true);
+
     try {
       const response = await fetch(
         `${process.env.REACT_APP_BACKEND}/foods?search=${searchTerm}`,
@@ -45,6 +49,7 @@ const Home = ({ setUser }) => {
       }
 
       if (response.ok) {
+        setIsLoading(false);
         setFoods(json);
       }
     } catch (error) {
@@ -86,6 +91,7 @@ const Home = ({ setUser }) => {
 
   const editJumlah = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -132,6 +138,7 @@ const Home = ({ setUser }) => {
 
         setSuccess(true);
         setJumlah("");
+        setIsLoading(false);
       }
     } catch (error) {
       setError(error.message);
@@ -140,6 +147,7 @@ const Home = ({ setUser }) => {
 
   const editHarga = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -185,6 +193,7 @@ const Home = ({ setUser }) => {
 
         setSuccess(true);
         setHarga("");
+        setIsLoading(false);
       }
     } catch (error) {
       setError(error.message);
@@ -193,6 +202,7 @@ const Home = ({ setUser }) => {
 
   const deleteData = (e, id) => {
     e.preventDefault();
+    setIsLoading(true);
 
     Swal.fire({
       title: "Are you sure?",
@@ -243,6 +253,7 @@ const Home = ({ setUser }) => {
               }
             });
             setSuccess(true);
+            setIsLoading(false);
           }
         } catch (error) {
           console.log(error.message);
@@ -303,6 +314,7 @@ const Home = ({ setUser }) => {
 
   const addData = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch(
@@ -351,6 +363,7 @@ const Home = ({ setUser }) => {
         setJumlah("");
         setHarga("");
         setSuccess(true);
+        setIsLoading(false);
       }
     } catch (error) {
       setError(error.message);
@@ -382,6 +395,9 @@ const Home = ({ setUser }) => {
         </div>
         <div className="cards-wrapper flex flex-wrap gap-4 mt-8 justify-center lg:justify-start">
           {displayData}
+          {isLoading ? (
+            <ThreeDot color="#000000" size="medium" text="" textColor="" />
+          ) : null}
           <div
             onClick={openAddModal}
             className="card-container w-56 h-40 rounded-lg border-2 border-black flex justify-center opacity-75 cursor-pointer"
@@ -415,7 +431,16 @@ const Home = ({ setUser }) => {
                   className="mt-8 w-28 h-16 rounded-full text-white"
                   style={{ backgroundColor: "#99BC85" }}
                 >
-                  Edit
+                  {isLoading ? (
+                    <ThreeDot
+                      color="#000000"
+                      size="medium"
+                      text=""
+                      textColor=""
+                    />
+                  ) : (
+                    "Edit"
+                  )}
                 </button>
               </div>
             </form>
@@ -454,7 +479,16 @@ const Home = ({ setUser }) => {
                   className="mt-8 w-28 h-16 rounded-full text-white"
                   style={{ backgroundColor: "#99BC85" }}
                 >
-                  Tambah
+                  {isLoading ? (
+                    <ThreeDot
+                      color="#000000"
+                      size="medium"
+                      text=""
+                      textColor=""
+                    />
+                  ) : (
+                    "Tambah"
+                  )}
                 </button>
               </div>
             </form>
@@ -477,7 +511,16 @@ const Home = ({ setUser }) => {
                   className="mt-8 w-28 h-16 rounded-full text-white"
                   style={{ backgroundColor: "#99BC85" }}
                 >
-                  Edit
+                  {isLoading ? (
+                    <ThreeDot
+                      color="#000000"
+                      size="medium"
+                      text=""
+                      textColor=""
+                    />
+                  ) : (
+                    "Edit"
+                  )}
                 </button>
               </div>
             </form>

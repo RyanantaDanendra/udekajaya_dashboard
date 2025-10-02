@@ -4,9 +4,11 @@ import Layout from "../Components/Layout";
 import * as XLSX from "xlsx";
 import { saveAs } from "file-saver";
 import Swal from "sweetalert2";
+import { ThreeDot } from "react-loading-indicators";
 
 const Table = ({ setUser }) => {
   const [foods, setFoods] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const userLocal = JSON.parse(localStorage.getItem("user"));
   const token = userLocal.token;
@@ -41,6 +43,8 @@ const Table = ({ setUser }) => {
 
   useEffect(() => {
     const getFoods = async () => {
+      setIsLoading(true);
+
       try {
         const response = await fetch(`${process.env.REACT_APP_BACKEND}/foods`, {
           method: "GET",
@@ -57,6 +61,7 @@ const Table = ({ setUser }) => {
 
         if (response.ok) {
           setFoods(json);
+          setIsLoading(false);
         }
       } catch (error) {
         console.log(error.message);
@@ -101,14 +106,17 @@ const Table = ({ setUser }) => {
         <div className="form-wrapper flex justify-center mt-8">
           <table id="table">
             <thead>
-              <tr>
-                <th className="w-12 text-sm lg:text-xl">No.</th>
-                <th className="w-32 text-xs lg:text-xl">Nama</th>
-                <th className="w-32 text-xs lg:text-xl">Jumlah</th>
-                <th className="w-32 text-xs lg:text-xl">Harga/sack</th>
-                <th className="w-40 text-xs lg:text-xl">Total Harga(Rp)</th>
-              </tr>
+              {!isLoading ? (
+                <tr>
+                  <th className="w-12 text-sm lg:text-xl">No.</th>
+                  <th className="w-32 text-xs lg:text-xl">Nama</th>
+                  <th className="w-32 text-xs lg:text-xl">Jumlah</th>
+                  <th className="w-32 text-xs lg:text-xl">Harga/sack</th>
+                  <th className="w-40 text-xs lg:text-xl">Total Harga(Rp)</th>
+                </tr>
+              ) : null}
             </thead>
+            {isLoading ? <ThreeDot color="#000000" size="medium" /> : null}
             <tbody>{displayData}</tbody>
           </table>
         </div>

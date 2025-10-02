@@ -75,11 +75,7 @@ const Login = ({ setUser }) => {
             className="mt-8 px-7 py-3 rounded-full"
             style={{ backgroundColor: "#E4EFE7" }}
           >
-            {isLoading ? (
-              <ThreeDot color="#32cd32" size="medium" text="" textColor="" />
-            ) : (
-              "Log-in"
-            )}
+            {isLoading ? <ThreeDot color="#000000" size="medium" /> : "Log-in"}
           </button>
         </form>
       </div>

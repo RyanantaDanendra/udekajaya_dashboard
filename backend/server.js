@@ -47,16 +47,16 @@ const connectDb = async () => {
 };
 
 // local
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => {
-//     app.listen(process.env.PORT, () => {
-//       console.log("Connected to database & Listening on port 4000");
-//     });
-//   })
-//   .catch((error) => {
-//     console.log(error);
+mongoose;
+// .connect(process.env.MONGO_URI)
+// .then(() => {
+//   app.listen(process.env.PORT, () => {
+//     console.log("Connected to database & Listening on port 4000");
 //   });
+// })
+// .catch((error) => {
+//   console.log(error);
+// });
 
 // Vercel Serverless Export
 module.exports = async (req, res) => {
