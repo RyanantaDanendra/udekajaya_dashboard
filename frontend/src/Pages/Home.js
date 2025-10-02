@@ -359,8 +359,8 @@ const Home = ({ setUser }) => {
 
   return (
     <Layout setUser={setUser}>
-      <div className="lg:ps-10 w-full">
-        <div className="flex lg:flex-row lg:justify-between lg:items-center pe-9 w-full flex-col items-center">
+      <div className="lg:ps-10 w-full ps-0">
+        <div className="flex lg:flex-row lg:justify-between lg:items-center lg:pe-9 pe-0 w-full flex-col items-center">
           <h1 className="text-3xl mt-12">Produk</h1>
           <div className="mt-10 flex">
             <input

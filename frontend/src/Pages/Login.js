@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLogin } from "../Hooks/useLogin";
 import { useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
+import { ThreeDot } from "react-loading-indicators";
 
 const Login = ({ setUser }) => {
   const { error, isLoading, login } = useLogin(setUser);
@@ -74,7 +75,11 @@ const Login = ({ setUser }) => {
             className="mt-8 px-7 py-3 rounded-full"
             style={{ backgroundColor: "#E4EFE7" }}
           >
-            Log-in
+            {isLoading ? (
+              <ThreeDot color="#32cd32" size="medium" text="" textColor="" />
+            ) : (
+              "Log-in"
+            )}
           </button>
         </form>
       </div>

@@ -31,32 +31,32 @@ app.use("/", userRoutes);
 let isConnected = false;
 
 // production
-const connectDb = async () => {
-  if (isConnected) {
-    console.log("Using existing database connection.");
-    return;
-  }
+// const connectDb = async () => {
+//   if (isConnected) {
+//     console.log("Using existing database connection.");
+//     return;
+//   }
 
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    isConnected = true;
-    console.log("Connected to db");
-  } catch (error) {
-    console.error("MongoDB connection error:", error);
-  }
-};
+//   try {
+//     await mongoose.connect(process.env.MONGO_URI);
+//     isConnected = true;
+//     console.log("Connected to db");
+//   } catch (error) {
+//     console.error("MongoDB connection error:", error);
+//   }
+// };
 
 // local
-// mongoose
-//   .connect(process.env.MONGO_URI)
-//   .then(() => {
-//     app.listen(process.env.PORT, () => {
-//       console.log("Connected to database & Listening on port 4000");
-//     });
-//   })
-//   .catch((error) => {
-//     console.log(error);
-//   });
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    app.listen(process.env.PORT, () => {
+      console.log("Connected to database & Listening on port 4000");
+    });
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
 // Vercel Serverless Export
 module.exports = async (req, res) => {
